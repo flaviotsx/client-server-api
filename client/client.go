@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+type Quotation struct {
+	Bid float64 `json:"bid"`
+}
+
 func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, 300*time.Millisecond)
@@ -30,9 +34,7 @@ func main() {
 		fmt.Println("Erro ao ler a resposta", err)
 	}
 
-	var quotation struct {
-		Bid float64 `json:"bid"`
-	}
+	var quotation *Quotation
 
 	err = json.Unmarshal(body, &quotation)
 	if err != nil {
@@ -41,7 +43,7 @@ func main() {
 
 	fmt.Printf("Dollar: %.2f\n", quotation.Bid)
 
-	err = os.WriteFile("cotacao.json", body, 0644)
+	err = os.WriteFile("cotacao.txt", body, 0644)
 	if err != nil {
 		fmt.Println("Erro ao escrever a resposta", err)
 		return
